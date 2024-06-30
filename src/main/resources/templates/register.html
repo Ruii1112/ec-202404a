@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+  <head
+    th:replace="~{common/head :: head_fragment(title = '新規登録', links = ~{::link})}"
+  >
+    <link rel="stylesheet" th:href="@{/css/register.css}" />
+  </head>
+  <body>
+    <div th:replace="~{common/header :: header_fragment}"></div>
+    <main>
+      <div class="register-form">
+        <form
+          th:action="@{/register}"
+          th:object="${userRegisterForm}"
+          method="post"
+          class="col s12"
+        >
+          <div class="row">
+            <div class="input-field col s6">
+              <i id="nameIcon" class="material-icons prefix">person</i>
+              <input
+                th:field="*{lastName}"
+                id="lastName"
+                type="text"
+                class="validate"
+              />
+              <label for="lastName">姓</label>
+              <span class="helper-text" th:errors="*{lastName}">エラー</span>
+            </div>
+            <div class="input-field col s6">
+              <input
+                th:field="*{firstName}"
+                id="firstName"
+                type="text"
+                class="validate"
+              />
+              <label for="firstName">名</label>
+              <span class="helper-text" th:errors="*{firstName}">エラー</span>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="input-field col s12">
+              <i class="material-icons prefix">mail</i>
+              <input
+                th:field="*{email}"
+                id="email"
+                type="text"
+                class="validate"
+              />
+              <label for="email">email</label>
+              <span class="helper-text" th:errors="*{email}">エラー</span>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="input-field col s12">
+              <i class="material-icons prefix">password</i>
+              <input
+                th:field="*{password}"
+                id="password"
+                type="password"
+                class="validate"
+              />
+              <label for="password">password</label>
+              <span class="helper-text" th:errors="*{password}">エラー</span>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="input-field col s12">
+              <i class="material-icons prefix">password</i>
+              <input
+                th:field="*{confirmPassword}"
+                id="confirmPassword"
+                type="password"
+                class="validate"
+              />
+              <label for="confirmPassword">確認用password</label>
+              <span class="helper-text" th:errors="*{confirmPassword}"
+                >エラー</span
+              >
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="input-field col s12">
+              <i class="material-icons prefix">location_on</i>
+              <input
+                th:field="*{zipcode}"
+                id="zipcode"
+                type="text"
+                class="validate"
+              />
+              <label for="zipcode">郵便番号(ハイフンあり 例：000-0000)</label>
+              <span class="helper-text" th:errors="*{zipcode}">エラー</span>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="input-field col s12">
+              <i class="material-icons prefix">location_on</i>
+              <input
+                th:field="*{prefecture}"
+                id="prefecture"
+                type="text"
+                class="validate"
+              />
+              <label for="prefecture">都道府県</label>
+              <span class="helper-text" th:errors="*{prefecture}">エラー</span>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="input-field col s12">
+              <i class="material-icons prefix">location_on</i>
+              <input
+                th:field="*{municipalities}"
+                id="municipalities"
+                type="text"
+                class="validate"
+              />
+              <label for="municipalities">市区町村</label>
+              <span class="helper-text" th:errors="*{municipalities}"
+                >エラー</span
+              >
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="input-field col s12">
+              <i class="material-icons prefix">location_on</i>
+              <input
+                th:field="*{address}"
+                id="address"
+                type="text"
+                class="validate"
+              />
+              <label for="address">住所</label>
+              <span class="helper-text" th:errors="*{address}">エラー</span>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="input-field col s12">
+              <i class="material-icons prefix">call</i>
+              <input
+                th:field="*{telephone}"
+                id="telephone"
+                type="text"
+                class="validate"
+              />
+              <label for="telephone">電話番号(ハイフンあり 例：000-0000-0000)</label>
+              <span class="helper-text" th:errors="*{telephone}">エラー</span>
+            </div>
+          </div>
+
+          <button
+            class="btn waves-effect waves-light"
+            type="submit"
+            name="action"
+          >
+            新規登録
+            <i class="material-icons right">how_to_reg</i>
+          </button>
+        </form>
+      </div>
+    </main>
+    <div th:replace="~{common/footer :: footer_fragment}"></div>
+    <script th:src="@{/js/register/control-name-input-activation.js}"></script>
+    <script th:src="@{/js/register/control-valid-input-fields.js}"></script>
+    <script th:src="@{/js/register/input-zipcode.js}"></script>
+  </body>
+</html>

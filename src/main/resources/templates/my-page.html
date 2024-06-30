@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html
+  lang="ja"
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+>
+  <head
+    th:replace="~{common/head :: head_fragment(title = 'マイページ', links = ~{::link})}"
+  >
+    <link rel="stylesheet" th:href="@{/css/item-list.css}" />
+    <link rel="stylesheet" th:href="@{/css/order-history.css}" />
+    <link rel="stylesheet" th:href="@{/css/my-page.css}" />
+  </head>
+  <body>
+    <div th:replace="~{common/header :: header_fragment}"></div>
+    <main>
+      <div class="my-page">
+        <div class="section1">
+          <h3 class="page-title">登録情報更新</h3>
+          <div class="change-form">
+            <form
+              th:action="@{/my-page}"
+              th:object="${userMyPageUpdateForm}"
+              method="post"
+              class="col s12"
+            >
+              <div class="row">
+                <div class="input-field col s12">
+                  <i id="nameIcon" class="material-icons prefix">person</i>
+                  <input
+                    th:field="*{name}"
+                    id="name"
+                    type="text"
+                    class="validate"
+                  />
+                  <label for="name">氏名</label>
+                  <span class="helper-text" th:errors="*{name}">エラー</span>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="input-field col s12">
+                  <i class="material-icons prefix">mail</i>
+                  <input
+                    th:field="*{email}"
+                    id="email"
+                    type="text"
+                    class="validate"
+                  />
+                  <input type="hidden" name="id" th:value="${id}" />
+                  <label for="email">email</label>
+                  <span class="helper-text" th:errors="*{email}">エラー</span>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="input-field col s12">
+                  <i class="material-icons prefix">location_on</i>
+                  <input
+                    th:field="*{zipcode}"
+                    id="zipcode"
+                    type="text"
+                    class="validate"
+                  />
+                  <label for="zipcode"
+                    >郵便番号(ハイフンあり 例：000-0000)</label
+                  >
+                  <span class="helper-text" th:errors="*{zipcode}">エラー</span>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="input-field col s12">
+                  <i class="material-icons prefix">location_on</i>
+                  <input
+                    th:field="*{prefecture}"
+                    id="prefecture"
+                    type="text"
+                    class="validate"
+                  />
+                  <label for="prefecture">都道府県</label>
+                  <span class="helper-text" th:errors="*{prefecture}"
+                    >エラー</span
+                  >
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="input-field col s12">
+                  <i class="material-icons prefix">location_on</i>
+                  <input
+                    th:field="*{municipalities}"
+                    id="municipalities"
+                    type="text"
+                    class="validate"
+                  />
+                  <label for="municipalities">市区町村</label>
+                  <span class="helper-text" th:errors="*{municipalities}"
+                    >エラー</span
+                  >
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="input-field col s12">
+                  <i class="material-icons prefix">location_on</i>
+                  <input
+                    th:field="*{address}"
+                    id="address"
+                    type="text"
+                    class="validate"
+                  />
+                  <label for="address">住所</label>
+                  <span class="helper-text" th:errors="*{address}">エラー</span>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="input-field col s12">
+                  <i class="material-icons prefix">call</i>
+                  <input
+                    th:field="*{telephone}"
+                    id="telephone"
+                    type="text"
+                    class="validate"
+                  />
+                  <label for="telephone"
+                    >電話番号(ハイフンあり 例：000-0000-0000)</label
+                  >
+                  <span class="helper-text" th:errors="*{telephone}"
+                    >エラー</span
+                  >
+                </div>
+              </div>
+
+              <button
+                class="btn waves-effect waves-light"
+                type="submit"
+                name="action"
+              >
+                更新
+                <i class="material-icons right">how_to_reg</i>
+              </button>
+            </form>
+            <p class="text-r">
+              <a th:href="@{/delete-account}">アカウント削除</a>
+            </p>
+          </div>
+        </div>
+        <div class="section2">
+          <h2 class="page-title">ブックマーク一覧</h2>
+          <div class="item-section" th:if="${bookMarkList == null}">
+            <p>ブックマークはありません</p>
+          </div>
+          <div class="item-section" th:if="${bookMarkList}">
+            <div
+              th:each="bookMarkItem : ${bookMarkList}"
+              class="item-container"
+            >
+              <a
+                th:href="@{/show-item-detail?id=} + ${bookMarkItem.id}"
+                class="item-wrap"
+              >
+                <div>
+                  <img th:src="@{'img/'} + ${bookMarkItem.imagePath}" alt="" />
+                </div>
+                <div class="item-info">
+                  <p class="item-name" th:text="${bookMarkItem.name}"></p>
+                </div>
+              </a>
+            </div>
+          </div>
+          <hr />
+          <h2 class="page-title">おすすめの商品</h2>
+          <div class="item-section">
+            <div
+              th:each="bookMarkItem : ${recommends}"
+              class="rcmnd-item-container"
+            >
+              <a
+                th:href="@{/show-item-detail?id=} + ${bookMarkItem.id}"
+                class="item-wrap"
+              >
+                <div>
+                  <img th:src="@{'img/'} + ${bookMarkItem.imagePath}" alt="" />
+                </div>
+                <div class="item-info">
+                  <p class="item-name" th:text="${bookMarkItem.name}"></p>
+                </div>
+              </a>
+            </div>
+          </div>
+          <div class="box">
+            <div class="order-history">
+              <h2 class="page-title">注文履歴</h2>
+              <div class="order-list" th:each="order: ${orderList}">
+                <div class="item-section" th:if="${order.id == null}">
+                  <p>注文履歴はありません</p>
+                </div>
+                <div
+                  th:each="orderItem: ${order.orderItemList}"
+                  class="order-item"
+                >
+                  <a
+                    th:href="@{/show-item-detail?id=} + ${orderItem.item.id}"
+                    class="product-image-link"
+                  >
+                    <img
+                      th:src="@{/img/} + ${orderItem.item.imagePath}"
+                      alt="画像"
+                      class="product-image"
+                    />
+                  </a>
+                  <div class="order-details">
+                    <a
+                      th:href="@{/show-item-detail?id=} + ${orderItem.item.id}"
+                      class="product-name"
+                    >
+                      <h2
+                        class="product-name"
+                        th:text="${orderItem.item.name}"
+                      ></h2>
+                    </a>
+                    <p
+                      class="order-date"
+                      th:text="${#temporals.format(order.orderTime, 'yyyy年MM月dd日')}"
+                    ></p>
+                    <p
+                      class="product-price"
+                      th:text="${#numbers.formatInteger(orderItem.calcSubTotalPrice, 0, 'COMMA')} + '円'"
+                    ></p>
+                    <a
+                      th:href="@{/show-item-detail?id=} + ${orderItem.item.id}"
+                      class="reorder-button"
+                      >再度購入</a
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <div th:replace="~{common/footer :: footer_fragment}"></div>
+    <script th:src="@{/js/register/control-name-input-activation.js}"></script>
+    <script th:src="@{/js/register/control-valid-input-fields.js}"></script>
+    <script th:src="@{/js/register/input-zipcode.js}"></script>
+  </body>
+</html>

@@ -1,0 +1,92 @@
+@charset "UTF-8";
+
+main {
+  margin: 20 10 0 0;
+  padding: 0;
+  display: block;
+  justify-content: center;
+  align-items: center;
+  height: auto;
+}
+
+.text-r {
+  text-align: right;
+}
+
+.my-page {
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+}
+
+.page-title {
+  margin-bottom: 12px;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.section1 {
+  width: 28%;
+  margin: 20px;
+}
+
+.section2 {
+  width: 72%;
+  margin: 20px;
+}
+
+.change-form {
+  width: 95%;
+  max-width: 500px;
+  padding: 24px 0;
+}
+
+.change-form button i.right {
+  margin-left: 4px;
+}
+
+.change-form button {
+  background-color: white;
+  color: rgb(34, 34, 34);
+  width: 100%;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.change-form button:hover {
+  background-color: #ffc107;
+  color: white;
+}
+
+.row {
+  margin-bottom: 0;
+}
+
+.rcmnd-item-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 33%;
+  padding: 12px 0;
+}
+
+/* 以下注文履歴転用部分 */
+.box {
+  margin: 0;
+  margin-bottom: 20px;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.order-history {
+  max-width: none;
+  width: 100%;
+  overflow-x: auto;
+}
+
+.order-item {
+  min-width: 100px;
+  width: 30%;
+}

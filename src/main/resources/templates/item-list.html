@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+  <head
+    th:replace="~{common/head :: head_fragment(title = '商品一覧', links = ~{::link})}"
+  >
+    <link rel="stylesheet" th:href="@{/css/item-list.css}" />
+    <link
+      rel="stylesheet"
+      href="https://code.jquery.com/ui/1.13.3/themes/base/jquery-ui.css"
+    />
+  </head>
+  <body>
+    <div th:replace="~{common/header :: header_fragment}"></div>
+
+    <div class="spinner-box">
+      <img th:src="@{/img/naruto.png}" class="loding-img">
+    </div>
+
+    <main>
+      <div class="control">
+        <div class="control__search-word">
+          <p
+            th:if="${searchWord} != null and ${!searchWord.equals('')}"
+            th:text="検索：+${searchWord}"
+          ></p>
+        </div>
+        <div class="control__sort-type">
+          <form
+            th:action="@{/}"
+            method="get"
+            id="itemListSearchForm"
+          >
+            <input
+              type="hidden"
+              name="searchWord"
+              id="searchWord"
+              th:value="${searchWord}"
+            />
+            <div class="input-field">
+              <select name="sortType" id="sortType">
+                <option value="0" th:selected="${sortType == 0}">名前順</option>
+                <option value="1" th:selected="${sortType == 1}">
+                  価格の安い順
+                </option>
+                <option value="2" th:selected="${sortType == 2}">
+                  価格の高い順
+                </option>
+              </select>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div>
+        <p th:text="${orderError}" style="color: red"></p>
+        <p th:text="${pageError}" style="color: red"></p>
+        <p th:text="${searchError}" style="color: red"></p>
+
+        <div class="item-section">
+          <div th:each="item : ${itemList}" class="item-container">
+            <a
+              th:href="@{/show-item-detail?id=} + ${item.id}"
+              class="item-wrap"
+            >
+              <div>
+                <img
+                  style="aspect-ratio: 4 / 3; width: 100%"
+                  th:src="@{'img/webp/'} + ${item.imagePath.replace('jpg', 'webp')}"
+                  alt=""
+                  loading="lazy"
+                />
+              </div>
+              <div class="item-info">
+                <p class="item-name" th:text="${item.name}"></p>
+                <p class="item-price" th:text="並盛+' '+${#numbers.formatInteger(item.priceM, 0, 'COMMA')}+円"></p>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="content_detail__pagination cdp" th:actpage="${currentPage}">
+        <a
+          class="cdp_i"
+          th:each="page : ${pages}"
+          th:href="@{/} + '?searchWord=' + ${searchWord} + '&sortType=' + ${sortType} + '&page=' + ${page}"
+          th:text="${page}"
+        ></a>
+      </div>
+    </main>
+
+    <div id="popup" class="add-item-card" th:data-flag="${addFlag}">
+      カートに追加されました。
+    </div>
+
+    <div th:replace="~{common/footer :: footer_fragment}"></div>
+    <script th:src="@{/js/item-list/select.js}"></script>
+    <script th:src="@{/js/pagination.js}"></script>
+    <script th:src="@{/js/popup.js}"></script>
+    <script th:src="@{/js/loading.js}"></script>
+  </body>
+</html>

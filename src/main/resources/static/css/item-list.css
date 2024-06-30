@@ -1,0 +1,154 @@
+@charset "UTF-8";
+
+.control {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 70%;
+  margin: 0 auto;
+}
+.control__search-word {
+  width: 60%;
+}
+
+.control__sort-type {
+  width: 36%;
+}
+
+.item-section {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.item-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 25%;
+  padding: 12px 0;
+}
+
+.item-wrap {
+  display: block;
+  width: 96%;
+  cursor: pointer;
+}
+
+.item-wrap img {
+  background-color: rgb(80, 79, 79);
+}
+
+.item-info {
+  padding-top: 8px;
+}
+
+.item-name {
+  font-size: 20px;
+  font-weight: bold;
+  color: white;
+  text-align: center;
+}
+
+.item-price {
+  color: rgba(255, 255, 255, 0.65);
+  text-align: center;
+}
+
+@keyframes cdp-in {
+  from {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.cdp {
+  position: relative;
+  text-align: center;
+  font-size: 0;
+  z-index: 6;
+  margin: 10px 0;
+
+  animation: cdp-in 500ms ease both;
+  animation-delay: 200ms;
+}
+
+.cdp_i {
+  font-size: 14px;
+  line-height: 14px;
+  text-decoration: none;
+
+  transition: background-color 250ms ease-in-out, border-color 250ms ease-in-out,
+    color 250ms ease-in-out;
+
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  text-transform: uppercase;
+  margin: 0 3px 6px;
+  height: 38px;
+  width: 38px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  padding: 0;
+  color: #fff;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  transition: border 500ms ease;
+}
+
+.cdp_i:hover {
+  background-color: #000;
+  color: #fff;
+  border: 2px solid rgb(255, 255, 255);
+}
+
+.cdp_i.active {
+  background-color: #000;
+  color: #fff;
+  border: 2px solid rgb(255, 255, 255);
+}
+
+.add-item-card {
+  display: none;
+  position: fixed;
+  top: 10%;
+  right: 10%;
+  transform: translateX(25%);
+  background-color: #000;
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to{
+    transform: rotate(359deg);
+  }
+}
+
+.loding-img {
+  animation: spin 2s linear .2s infinite;;
+}
+
+.spinner-box {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: transparent;
+  position: fixed;
+  background: rgba(0, 0, 0, 0.5);
+  top: 0;
+  left: 0;
+  z-index: 9999;
+}

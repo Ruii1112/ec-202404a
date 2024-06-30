@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+  <head
+    th:replace="~{common/head :: head_fragment(title = '注文内容確認', links = ~{::link})}"
+  >
+    <link rel="stylesheet" th:href="@{/css/order-confirm.css}" />
+  </head>
+  <body>
+    <div th:replace="~{common/header :: header_fragment}"></div>
+    <main>
+      <h1 class="page-title">注文確認画面</h1>
+
+      <div class="order-content-section" th:unless="${order == null}">
+        <table class="order-table">
+          <thead class="order-table__thead">
+            <tr>
+              <th>商品</th>
+              <th class="th-quantity">数量</th>
+              <th class="th-total">小計</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr th:each="orderItem: ${order.orderItemList}">
+              <td class="td-item">
+                <div class="td-item__img">
+                  <img
+                    th:src="@{'img/'} + ${orderItem.item.imagePath}"
+                    alt=""
+                  />
+                </div>
+                <div class="td-item__info">
+                  <p class="td-item__name" th:text="${orderItem.item.name}"></p>
+                  <p
+                    class="td-item__price"
+                    th:text="${#numbers.formatInteger(orderItem.calcSubTotalPrice / orderItem.quantity, 0, 'COMMA')} + '円 '"
+                  ></p>
+                  <p class="td-item__list">
+                    <span
+                      th:each="orderTopping : ${orderItem.orderToppingList}"
+                      th:text="${orderTopping.topping.name}"
+                    >
+                    </span>
+                  </p>
+                </div>
+              </td>
+              <td class="td-quantity">
+                <p
+                  class="td-quantity__value"
+                  th:text="${orderItem.quantity}"
+                ></p>
+              </td>
+              <td class="td-total">
+                <p
+                  th:text="${#numbers.formatInteger(orderItem.calcSubTotalPrice, 0, 'COMMA')} + '円 '"
+                ></p>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="total-price">
+          <p
+            class="total-price__main"
+            th:text="'合計：' + ${#numbers.formatInteger(order.calcTotalPrice + order.tax, 0, 'COMMA')} + ' 円'"
+          ></p>
+          <p
+            class="total-price__sub"
+            th:text="'（うち消費税額 ' + ${#numbers.formatInteger(order.tax, 0, 'COMMA')} +' 円）'"
+          ></p>
+        </div>
+      </div>
+
+      <div class="order-form">
+        <form
+          action="item-detail.html"
+          th:action="@{/order}"
+          method="post"
+          th:object="${orderForm}"
+        >
+          <input type="hidden" name="orderId" th:value="${order.id}" />
+          <div class="address-section">
+            <p class="address-section__title">お届け先情報</p>
+            <a
+              id="loginInfoBtn"
+              class="waves-effect waves-light btn-small address-section__auto-input-button"
+            >
+              <i class="material-icons left">edit</i>ログイン者情報を入力
+            </a>
+            <div class="address-section__inputs">
+              <div class="row">
+                <div class="input-field col s12">
+                  <i class="material-icons prefix">person</i>
+                  <input
+                    th:field="*{destinationName}"
+                    id="destinationName"
+                    type="text"
+                    class="validate"
+                  />
+                  <label for="destinationName">氏名</label>
+                  <span class="helper-text" th:errors="*{destinationName}"
+                    >エラー</span
+                  >
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="input-field col s12">
+                  <i class="material-icons prefix">mail</i>
+                  <input
+                    th:field="*{destinationEmail}"
+                    id="destinationEmail"
+                    type="text"
+                    class="validate"
+                  />
+                  <label for="destinationEmail">email</label>
+                  <span class="helper-text" th:errors="*{destinationEmail}"
+                    >エラー</span
+                  >
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="input-field col s12">
+                  <i class="material-icons prefix">location_on</i>
+                  <input
+                    th:field="*{destinationZipcode}"
+                    id="destinationZipcode"
+                    type="text"
+                    class="validate"
+                  />
+                  <label for="destinationZipcode"
+                    >郵便番号(ハイフンあり 例：000-0000)</label
+                  >
+                  <span class="helper-text" th:errors="*{destinationZipcode}"
+                    >エラー</span
+                  >
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="input-field col s12">
+                  <i class="material-icons prefix">location_on</i>
+                  <input
+                    th:field="*{destinationPrefecture}"
+                    id="destinationPrefecture"
+                    type="text"
+                    class="validate"
+                  />
+                  <label for="destinationPrefecture">都道府県</label>
+                  <span class="helper-text" th:errors="*{destinationPrefecture}"
+                    >エラー</span
+                  >
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="input-field col s12">
+                  <i class="material-icons prefix">location_on</i>
+                  <input
+                    th:field="*{destinationMunicipalities}"
+                    id="destinationMunicipalities"
+                    type="text"
+                    class="validate"
+                  />
+                  <label for="destinationMunicipalities">市区町村</label>
+                  <span
+                    class="helper-text"
+                    th:errors="*{destinationMunicipalities}"
+                    >エラー</span
+                  >
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="input-field col s12">
+                  <i class="material-icons prefix">location_on</i>
+                  <input
+                    th:field="*{destinationAddress}"
+                    id="destinationAddress"
+                    type="text"
+                    class="validate"
+                  />
+                  <label for="destinationAddress">住所</label>
+                  <span class="helper-text" th:errors="*{destinationAddress}"
+                    >エラー</span
+                  >
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="input-field col s12">
+                  <i class="material-icons prefix">call</i>
+                  <input
+                    th:field="*{destinationTel}"
+                    id="destinationTel"
+                    type="text"
+                    class="validate"
+                  />
+                  <label for="destinationTel"
+                    >電話番号(ハイフンあり 例：000-0000-0000)</label
+                  >
+                  <span class="helper-text" th:errors="*{destinationTel}"
+                    >エラー</span
+                  >
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="input-field col s6">
+                  <i class="material-icons prefix">calendar_month</i>
+                  <input
+                    th:field="*{deliveryDate}"
+                    id="deliveryDate"
+                    type="text"
+                    class="validate datepicker"
+                  />
+                  <label for="deliveryDate">配達日</label>
+                  <span class="helper-text" th:errors="*{deliveryDate}"
+                    >エラー</span
+                  >
+                </div>
+                <div
+                  class="input-field col s6"
+                  id="deliveryTimeSelectInputField"
+                >
+                  <select name="deliveryTime" id="deliveryTimeSelect" th:field="*{deliveryTime}">
+                    <option selected value="10">10時</option>
+                    <option value="11">11時</option>
+                    <option value="12">12時</option>
+                    <option value="13">13時</option>
+                    <option value="14">14時</option>
+                    <option value="15">15時</option>
+                    <option value="16">16時</option>
+                    <option value="17">17時</option>
+                    <option value="18">18時</option>
+                  </select>
+                  <label>配達時間</label>
+                  <span class="helper-text" th:errors="*{deliveryTime}"
+                    >エラー</span
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="payment-section">
+            <p class="payment-section__title">お支払方法</p>
+
+            <div class="cash-section">
+              <div>
+                <label>
+                  <input
+                    name="paymentMethod"
+                    type="radio"
+                    class="with-gap money-method"
+                    value="1"
+                    checked="checked"
+                    th:field="*{paymentMethod}"
+                  />
+                  <span>代金引換</span>
+                </label>
+              </div>
+            </div>
+
+            <div class="card-section">
+              <div>
+                <label>
+                  <input
+                    name="paymentMethod"
+                    type="radio"
+                    class="with-gap credit-method"
+                    value="2"
+                    th:field="*{paymentMethod}"
+                  />
+                  <span>クレジットカード</span>
+                </label>
+              </div>
+
+              <div class="credit-info">
+                <div class="row">
+                  <div class="input-field col s12">
+                    <i class="material-icons prefix">mail</i>
+                    <input
+                      th:field="*{cardNumber}"
+                      id="cardNumber"
+                      type="text"
+                      class="validate"
+                    />
+                    <label for="cardNumber"
+                      >クレジットカード番号(ハイフンなし
+                      例：12345678901234)</label
+                    >
+                    <span class="helper-text" th:errors="*{cardNumber}"
+                      >エラー</span
+                    >
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="input-field col s12">
+                    <i class="material-icons prefix">mail</i>
+                    <input
+                      th:field="*{cardExpYear}"
+                      id="cardExpYear"
+                      type="text"
+                      class="validate"
+                    />
+                    <label for="cardExpYear">カード有効期限（年）</label>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="input-field col s12">
+                    <i class="material-icons prefix">mail</i>
+                    <input
+                      th:field="*{cardExpMonth}"
+                      id="cardExpMonth"
+                      type="text"
+                      class="validate"
+                    />
+                    <label for="cardExpMonth">カード有効期限（月）</label>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="input-field col s12">
+                    <i class="material-icons prefix">mail</i>
+                    <input
+                      th:field="*{cardName}"
+                      id="cardName"
+                      type="text"
+                      class="validate"
+                    />
+                    <label for="cardName">クレジットカード名義人</label>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="input-field col s12">
+                    <i class="material-icons prefix">mail</i>
+                    <input
+                      th:field="*{cardCvv}"
+                      id="cardCvv"
+                      type="text"
+                      class="validate"
+                    />
+                    <label for="cardCvv">セキュリティコード</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="confirm-section">
+              <button class="waves-effect waves-light btn-large">
+                注文確定<i class="material-icons right">ramen_dining</i>
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </main>
+    <div th:replace="~{common/footer :: footer_fragment}"></div>
+
+    <script th:src="@{/js/zipcode.js}"></script>
+    <script th:src="@{/js/order-confirm/getLoginInfo.js}"></script>
+    <script th:src="@{/js/order-confirm/input-zipcode.js}"></script>
+    <script
+      th:src="@{/js/order-confirm/control-deliveryTime-option.js}"
+    ></script>
+    <script th:src="@{/js/materialize/date-picker.js}"></script>
+    <script th:src="@{/js/credit-display.js}"></script>
+  </body>
+</html>

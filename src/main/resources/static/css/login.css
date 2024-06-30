@@ -1,0 +1,52 @@
+@charset "UTF-8";
+
+main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-form {
+  width: 95%;
+  max-width: 500px;
+}
+
+.login-form button i.right {
+  margin-left: 4px;
+}
+
+.login-form button {
+  background-color: white;
+  color: rgb(34, 34, 34);
+  width: 100%;
+  font-weight: bold;
+}
+
+.login-form button:hover {
+  background-color: #ffc107;
+  color: white;
+}
+
+.register-link-wrap {
+  margin-top: 12px;
+  display: flex;
+  justify-content: end;
+}
+
+.register-link-wrap > a {
+  display: flex;
+  align-items: center;
+}
+
+.register-link-wrap i.right {
+  margin-left: 4px;
+}
+
+.row {
+  margin-bottom: 0;
+}
+
+.error-message {
+  color: #ff5252;
+  margin-bottom: 4px;
+}

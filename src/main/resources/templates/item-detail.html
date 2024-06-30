@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html
+  lang="ja"
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+>
+  <head
+    th:replace="~{common/head :: head_fragment(title = '商品詳細', links = ~{::link})}"
+  >
+    <link rel="stylesheet" th:href="@{/css/item-detail.css}" />
+  </head>
+  <body>
+    <div th:replace="~{common/header :: header_fragment}"></div>
+
+    <main>
+      <div class="item-container">
+        <div sec:authorize="isAuthenticated()" class="bookmark-item">
+          <i
+            class="fas fa-bookmark bookmark-icon"
+            th:data-flag="${bookmarkFlag}"
+            th:data-itemid="${item.id}"
+          ></i>
+        </div>
+        <div sec:authorize="isAnonymous()" class="bookmark-item">
+          <i class="fas fa-bookmark not-bookmark-icon"></i>
+        </div>
+        <div class="item-content">
+          <img th:src="@{/img/} + ${item.imagePath}" />
+          <div class="item-description">
+            <p class="item-description__title">商品詳細</p>
+            <p
+              class="item-description__content"
+              th:text="${item.description}"
+            ></p>
+          </div>
+
+          <div class="item-review-section">
+            <p class="item-review-section__title">レビュー</p>
+            <div class="review-description-container">
+              <div class="review-chart">
+                <canvas class="review-chart__canvas" id="myChart"></canvas>
+                <div class="review-chart__legend">
+                  <div>
+                    <p class="legend__label label--positive sort-review sort-positive">ポジティブ</p>
+                    <p id="value--positive" class="legend__value"></p>
+                  </div>
+                  <div>
+                    <p class="legend__label label--negative sort-review sort-negative">ネガティブ</p>
+                    <p id="value--negative" class="legend__value"></p>
+                  </div>
+                  <div>
+                    <p class="legend__label label--neutral sort-review sort-neutral">ニュートラル</p>
+                    <p id="value--neutral" class="legend__value"></p>
+                  </div>
+                </div>
+              </div>
+              <div class="review-control">
+                <div class="positive-review">
+                  <p>
+                    ポジティブレビュー<span
+                      class="positive-review__value"
+                      id="positive-review__value"
+                    ></span>
+                  </p>
+                  <p id="positive-review" class="positive-review__content"></p>
+                </div>
+                <div class="negative-review">
+                  <p>
+                    ネガティブレビュー<span
+                      class="negative-review__value"
+                      id="negative-review__value"
+                    ></span>
+                  </p>
+                  <p id="negative-review" class="negative-review__content"></p>
+                </div>
+
+                <div class="write-review-button-wrap">
+                  <a
+                    id="openReviewFormButton"
+                    class="write-review-button waves-effect waves-light btn"
+                    ><i class="material-icons left">edit</i>レビューを書く</a
+                  >
+                </div>
+              </div>
+            </div>
+            <div class="review-form" id="reviewForm" style="display: none">
+              <form
+                action="review.html"
+                th:action="@{/review/add}"
+                method="post"
+                th:object="${reviewForm}"
+              >
+                <input type="hidden" name="itemId" th:value="${itemId}" />
+                <div class="input-field">
+                  <textarea
+                    id="textarea1"
+                    class="materialize-textarea"
+                    th:field="*{content}"
+                  ></textarea>
+                  <label for="textarea1">レビュー内容</label>
+                  <span class="helper-text" th:errors="*{content}">エラー</span>
+                </div>
+
+                <button
+                  class="btn waves-effect waves-light review-submit-button"
+                  type="submit"
+                  name="action"
+                >
+                  投稿
+                  <i class="material-icons right">rate_review</i>
+                </button>
+              </form>
+            </div>
+            <div class="review-content-wrap" id="review-content-wrap"></div>
+          </div>
+        </div>
+
+        <div class="item-form">
+          <form
+            action="item-detail.html"
+            th:action="@{/shopping-cart/add-item}"
+            method="post"
+          >
+            <input type="hidden" name="itemId" th:value="${item.id}" />
+            <p class="item-name" th:text="${item.name}"></p>
+            <div class="size-input">
+              <p class="size-input__title">サイズ</p>
+              <div class="size-input__inputs">
+                <label>
+                  <input
+                    class="with-gap"
+                    type="radio"
+                    name="size"
+                    value="S"
+                    th:data-price="${item.priceS}"
+                  />
+                  <span
+                    th:text="'小盛: ' + ${#numbers.formatInteger(item.priceS, 0, 'COMMA')} + '円'"
+                  ></span>
+                </label>
+                <label>
+                  <input
+                    class="with-gap"
+                    type="radio"
+                    name="size"
+                    value="M"
+                    th:data-price="${item.priceM}"
+                    checked
+                  />
+                  <span
+                    th:text="'並盛: ' + ${#numbers.formatInteger(item.priceM, 0, 'COMMA')} + '円'"
+                  ></span>
+                </label>
+                <label>
+                  <input
+                    class="with-gap"
+                    type="radio"
+                    name="size"
+                    value="L"
+                    th:data-price="${item.priceL}"
+                  />
+                  <span
+                    th:text="'大盛: ' + ${#numbers.formatInteger(item.priceL, 0, 'COMMA')} + '円'"
+                  ></span>
+                </label>
+              </div>
+            </div>
+            <div class="topping-input">
+              <p class="topping-input__title">トッピング</p>
+              <div class="topping-input__inputs">
+                <label th:each="topping: ${item.toppingList}">
+                  <input
+                    type="checkbox"
+                    name="toppingList"
+                    class="filled-in"
+                    th:value="${topping.id}"
+                    th:data-price="${topping.price}"
+                  />
+                  <span
+                    th:text="${topping.name} + ${#numbers.formatInteger(topping.price, 0, 'COMMA')} + '円'"
+                  ></span>
+                </label>
+              </div>
+            </div>
+            <div class="quantity-input">
+              <div class="input-field quantity-input__select-container">
+                <select name="quantity">
+                  <option selected value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5">5</option>
+                  <option value="6">6</option>
+                  <option value="7">7</option>
+                  <option value="8">8</option>
+                  <option value="9">9</option>
+                  <option value="10">10</option>
+                  <option value="11">11</option>
+                  <option value="12">12</option>
+                </select>
+                <label>数量</label>
+              </div>
+              <p id="total-price"></p>
+            </div>
+            <button class="waves-effect waves-light btn-large cart-button">
+              <i class="material-icons right">shopping_cart</i>カートに入れる
+            </button>
+          </form>
+        </div>
+      </div>
+    </main>
+
+    <div id="popup" class="bookmark-card">
+      ブックマークされました
+    </div>
+
+    <div th:replace="~{common/footer :: footer_fragment}"></div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script th:inline="javascript">
+      const reviewList = /*[[${item.reviewList}]]*/ 'item.reviewList'
+      const isOpenReviewForm = /*[[${isOpenReviewForm}]]*/ 'isOpenReviewForm'
+    </script>
+    <script th:src="@{/js/item-detail/control-review-form.js}"></script>
+    <script th:src="@{/js/item-detail/review-chart.js}"></script>
+    <script th:src="@{/js/item-detail/review-list.js}"></script>
+    <script th:src="@{/js/item-detail/review-sort.js}"></script>
+    <script th:src="@{/js/totalPrice.js}"></script>
+    <script th:src="@{/js/materialize/select.js}"></script>
+    <script th:src="@{/js/bookmark.js}"></script>
+  </body>
+</html>

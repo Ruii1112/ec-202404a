@@ -1,0 +1,189 @@
+@charset "UTF-8";
+
+/* リセット */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+  padding: 0;
+}
+
+* {
+  font-family: Futura, 'Century Gothic', YuGothic, 'Hiragino Kaku Gothic ProN',
+    'Yu Gothic', Meiryo;
+}
+
+/* 全体で使うコンポーネント系部分 */
+body {
+  background-color: rgb(34, 34, 34);
+  color: white;
+}
+
+header {
+  height: 72px;
+  position: sticky;
+  z-index: 10;
+  top: 0;
+  padding: 0 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: rgb(34, 34, 34);
+}
+
+main {
+  min-height: calc(100vh - 75px);
+}
+
+.header-right {
+  display: flex;
+  gap: 8px;
+}
+
+.header-right > div {
+  cursor: pointer;
+}
+
+.header-right > div:hover {
+  background-color: rgb(105, 105, 105);
+}
+
+.header-right a {
+  color: white;
+  font-size: 16px;
+  display: block;
+  height: 72px;
+  line-height: 72px;
+  margin: 0 12px;
+}
+
+.header-logo {
+  height: 100%;
+}
+
+.header-logo img {
+  height: 90%;
+  width: auto;
+  margin: 5% 0;
+}
+
+.cart-icon-container {
+  position: relative;
+  display: inline-block;
+  margin-right: 20px;
+}
+
+.cart-icon-container a {
+  font-size: 24px;
+}
+
+.cart-badge {
+  display: none;
+  width: 24px;
+  height: 24px;
+  line-height: 24px;
+  position: absolute;
+  top: calc(50% - 12px);
+  right: calc(50% - 12px);
+  transform: translate(50%, -50%);
+  background-color: rgba(255, 0, 0);
+  color: white;
+  border-radius: 50%;
+  text-align: center;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+footer {
+  background-color: rgb(45, 53, 70);
+  padding: 16px 32px 32px 32px;
+}
+
+footer ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+footer a {
+  color: #9ca3af;
+  text-decoration: none;
+}
+
+footer a:hover {
+  color: #fff;
+}
+
+footer .flex {
+  display: flex;
+}
+
+footer hr {
+  height: 1px;
+  border: 0;
+  border-top: 1px solid #35363b;
+}
+
+.footer__navi {
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+}
+
+.footer__navi li {
+  display: inline-block;
+}
+
+.footer__navi li:not(:last-child) {
+  margin-right: 16px;
+}
+
+.footer__logo {
+  display: inline-block;
+  margin-top: 0;
+  position: relative;
+  top: -20px;
+  left: -20px;
+}
+
+.footer__logo-image {
+  width: 250px;
+  height: auto;
+  clip-path: inset(25px 25px 25px 25px);
+  position: relative;
+  display: block;
+  margin: 0;
+}
+
+/* Materializeの共通設定 */
+.input-field .active {
+  color: #ffc107 !important;
+}
+
+.input-field input:focus,
+.input-field textarea:focus {
+  border-bottom: 1px solid #ffc107 !important;
+  box-shadow: 0 1px 0 0 #ffc107 !important;
+}
+
+.input-field input.valid,
+.input-field textarea.valid {
+  border-bottom: 1px solid #ffc107 !important;
+  box-shadow: 0 1px 0 0 #ffc107 !important;
+}
+
+.input-field input,
+.input-field textarea {
+  color: white;
+}
+
+.input-field .helper-text {
+  color: #ff5252;
+}
+
+.btn:focus {
+  background-color: #ffc107;
+  color: white;
+}

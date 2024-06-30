@@ -1,0 +1,33 @@
+@charset "UTF-8";
+
+main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.register-form {
+  width: 95%;
+  max-width: 500px;
+  padding: 24px 0;
+}
+
+.register-form button i.right {
+  margin-left: 4px;
+}
+
+.register-form button {
+  background-color: white;
+  color: rgb(34, 34, 34);
+  width: 100%;
+  font-weight: bold;
+}
+
+.register-form button:hover {
+  background-color: #ffc107;
+  color: white;
+}
+
+.row {
+  margin-bottom: 0;
+}

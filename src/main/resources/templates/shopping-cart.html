@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+  <head
+    th:replace="~{common/head :: head_fragment(title = 'カート', links = ~{::link})}"
+  >
+    <link rel="stylesheet" th:href="@{/css/shopping-cart.css}" />
+  </head>
+  <body>
+    <div th:replace="~{common/header :: header_fragment}"></div>
+    <main>
+      <h1 class="page-title">カート</h1>
+
+      <span th:text="${noOrder}"></span>
+
+      <div class="cart-content-section" th:unless="${order == null}">
+        <table class="cart-table">
+          <thead class="cart-table__thead">
+            <tr>
+              <th>商品</th>
+              <th class="th-quantity">数量</th>
+              <th class="th-total">小計</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr th:each="orderItem: ${order.orderItemList}">
+              <td class="td-item">
+                <div class="td-item__img">
+                  <img
+                    th:src="@{'img/'} + ${orderItem.item.imagePath}"
+                    alt=""
+                  />
+                </div>
+                <div class="td-item__info">
+                  <p class="td-item__name" th:text="${orderItem.item.name}"></p>
+                  <p
+                    class="td-item__price"
+                    th:text="(${orderItem.size} == 'S' ? '小盛' : (${orderItem.size} == 'M' ? '並盛' : '大盛'))+'：'+${#numbers.formatInteger(orderItem.calcSubTotalPrice / orderItem.quantity, 0, 'COMMA')} + '円 '"
+                  ></p>
+                  <p class="td-item__list">
+                    <span
+                      th:each="orderTopping : ${orderItem.orderToppingList}"
+                      th:text="${orderTopping.topping.name}"
+                    >
+                    </span>
+                  </p>
+                </div>
+              </td>
+              <td class="td-quantity">
+                <p
+                  class="td-quantity__value"
+                  th:text="${orderItem.quantity}"
+                ></p>
+                <div class="td-quantity__delete">
+                  <form
+                    action="shopping-cart.html"
+                    th:action="@{/shopping-cart/delete-item}"
+                    method="post"
+                  >
+                    <input
+                      type="hidden"
+                      name="orderItemId"
+                      th:value="${orderItem.id}"
+                    />
+                    <button class="waves-effect waves-lignt btn-flat">
+                      削除
+                    </button>
+                  </form>
+                </div>
+              </td>
+              <td class="td-total">
+                <p
+                  th:text="${#numbers.formatInteger(orderItem.calcSubTotalPrice, 0, 'COMMA')} + '円 '"
+                ></p>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="total-price">
+          <p
+            class="total-price__main"
+            th:text="'合計：' + ${#numbers.formatInteger(order.calcTotalPrice + order.tax, 0, 'COMMA')} + ' 円'"
+          ></p>
+          <p
+            class="total-price__sub"
+            th:text="'（うち消費税額 ' + ${#numbers.formatInteger(order.tax, 0, 'COMMA')} +' 円）'"
+          ></p>
+        </div>
+
+        <div class="order-button-wrap" th:if="${order.orderItemList}">
+          <form
+            action="shopping-cart.html"
+            th:action="@{/order-confirm}"
+            method="get"
+          >
+            <input type="hidden" name="orderId" th:value="${order.id}" />
+            <button class="waves-effect waves-light btn">
+              ご購入手続きへ<i class="material-icons right">chevron_right</i>
+            </button>
+          </form>
+        </div>
+      </div>
+    </main>
+
+    <div th:replace="~{common/footer :: footer_fragment}"></div>
+  </body>
+</html>
