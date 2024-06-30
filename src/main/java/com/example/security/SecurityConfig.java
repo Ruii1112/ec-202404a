@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -14,8 +15,10 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 public class SecurityConfig {
+
   @Autowired
-  private CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
+  private CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
+
   @Bean
   protected SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     http.authorizeHttpRequests(authz -> authz
@@ -35,7 +38,7 @@ public class SecurityConfig {
         .loginPage("/login")
         .loginProcessingUrl("/login")
         .failureUrl("/login?error=true")
-        .defaultSuccessUrl("/", false)
+        .successHandler(customAuthenticationSuccessHandler)
         .usernameParameter("email")
         .passwordParameter("password")
     ).logout(logout -> logout
@@ -48,6 +51,8 @@ public class SecurityConfig {
         .ignoringRequestMatchers(new AntPathRequestMatcher("/get-item-info/**"))
         .ignoringRequestMatchers(new AntPathRequestMatcher("/bookmark/**"))
         .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+    ).sessionManagement(session -> session
+        .sessionFixation().none()
     );
 
     return http.build();

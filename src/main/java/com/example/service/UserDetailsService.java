@@ -48,23 +48,6 @@ public class UserDetailsService implements org.springframework.security.core.use
             throw new UsernameNotFoundException("Not found mail address:" + email);
         }
 
-        Order loginUserOrder = shoppingCartService.showOrder(user.getId());
-        Integer tmpId = shoppingCartController.extractNumbers(session.getId());
-
-        Order tmpOrder = shoppingCartService.showOrder(tmpId);
-        if (tmpOrder != null) {
-            if (loginUserOrder == null) {
-                tmpOrder.setUserId(user.getId());
-                orderConfirmService.updateUserId(tmpOrder);
-            } else {
-                for (OrderItem orderItem : tmpOrder.getOrderItemList()) {
-                    orderItem.setOrderId(loginUserOrder.getId());
-                    orderConfirmService.updateOrderItem(orderItem);
-                }
-                orderConfirmService.deleteById(tmpOrder.getId());
-            }
-        }
-
         Collection<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
         return new LoginUser(user, authorities);
