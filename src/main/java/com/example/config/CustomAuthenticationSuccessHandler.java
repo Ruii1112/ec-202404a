@@ -1,4 +1,4 @@
-package com.example.security;
+package com.example.config;
 
 import com.example.controller.ShoppingCartController;
 import com.example.domain.Order;
